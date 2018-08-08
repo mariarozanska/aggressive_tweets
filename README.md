@@ -15,3 +15,5 @@ Files:
   - reading the original dataset,
   - keeping only relevant information,
   - dividing the data into the training and test part.
+* Baseline.ipynb:
+  - analysis of the baseline model
