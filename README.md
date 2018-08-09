@@ -16,4 +16,7 @@ Files:
   - keeping only relevant information,
   - dividing the data into the training and test part.
 * Baseline.ipynb:
-  - analysis of the baseline model
+  - analysis of the baseline model.
+* TweetAnalysis.ipynb:
+  - analysis of punctuation,
+  - analysis of words.
