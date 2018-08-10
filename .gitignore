@@ -1,3 +1,4 @@
 # ignore jupyter checkpoints
 .ipynb_checkpoints
 *.txt
+__pycache__
