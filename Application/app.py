@@ -3,8 +3,6 @@ Detection of aggressive tweets
 
 Requirements:
 pickle, os, flask, wtforms, mypreprocessor
-
-# the code is based on "Python. Uczenie maszynowe", S. Raschka, 2018
 '''
 
 import pickle
