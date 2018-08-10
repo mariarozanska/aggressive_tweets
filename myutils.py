@@ -9,8 +9,8 @@ Plotting functions:
 - plot_validation_curve (accuracy)
 '''
 
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 import itertools
 import re
 
