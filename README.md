@@ -11,7 +11,7 @@ The dataset has 20001 tweets (in english) which are labeled (by human) as:
 - 0 (Non Cyber-Aggressive; 12179 items)
 
 Files:
-* myUtils.py:
+* myutils.py:
   - plotting functions.
   Requirements:
     matplotlib, numpy, sklearn, itertools, re
