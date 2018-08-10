@@ -31,6 +31,7 @@ Files:
   Requirements:
     numpy, pandas, sklearn, nltk, string, re, scipy
 * ClassificationOfTweets.ipynb:
-  - advanced preprocessing.
+  - advanced preprocessing,
+  - hyperparameter tuning.
   Requirements:
     numpy, pandas, sklearn, nltk, string, re, scipy, myUtils, pprint, pickle, os
