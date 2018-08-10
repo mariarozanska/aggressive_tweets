@@ -1,37 +1,41 @@
 # aggressive_tweets
 The final project for Bootcamp Data Science
 
-Problem: 
+## Problem:<br/>
 Detection of aggressive tweets
 
-Dataset: 
-https://www.kaggle.com/dataturks/dataset-for-detection-of-cybertrolls/home
+## Dataset:<br/>
+https://www.kaggle.com/dataturks/dataset-for-detection-of-cybertrolls/home<br/>
 The dataset has 20001 tweets (in english) which are labeled (by human) as:
 - 1 (Cyber-Aggressive; 7822 items)
 - 0 (Non Cyber-Aggressive; 12179 items)
 
-Files:
-* myutils.py:
+## Files:
+* _myutils.py_:
   - plotting functions.
-  Requirements:
+  Requirements:<br/>
     matplotlib, numpy, sklearn, itertools, re
-* PreparingData.ipynb:
+
+* _PreparingData.ipynb_:
   - reading the original dataset,
   - keeping only relevant information,
   - dividing the data into the training and test part.
-  Requirements:
+  Requirements:<br/>
     json, os, numpy, pandas, sklearn
-* Baseline.ipynb:
+
+* _Baseline.ipynb_:
   - analysis of the baseline model.
-  Requirements:
+  Requirements:<br/>
     numpy, pandas, sklearn, nltk, string, myUtils
-* TweetAnalysis.ipynb:
+
+* _TweetAnalysis.ipynb_:
   - analysis of punctuation,
   - analysis of words.
-  Requirements:
+  Requirements:<br/>
     numpy, pandas, sklearn, nltk, string, re, scipy
-* ClassificationOfTweets.ipynb:
+
+* _ClassificationOfTweets.ipynb_:
   - advanced preprocessing,
   - hyperparameter tuning.
-  Requirements:
+  Requirements:<br/>
     numpy, pandas, sklearn, nltk, string, re, scipy, myUtils, pprint, pickle, os
