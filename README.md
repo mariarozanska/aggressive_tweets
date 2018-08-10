@@ -13,14 +13,24 @@ The dataset has 20001 tweets (in english) which are labeled (by human) as:
 Files:
 * myUtils.py:
   - plotting functions.
+  Requirements:
+    matplotlib, numpy, sklearn, itertools, re
 * PreparingData.ipynb:
   - reading the original dataset,
   - keeping only relevant information,
   - dividing the data into the training and test part.
+  Requirements:
+    json, os, numpy, pandas, sklearn
 * Baseline.ipynb:
   - analysis of the baseline model.
+  Requirements:
+    numpy, pandas, sklearn, nltk, string, myUtils
 * TweetAnalysis.ipynb:
   - analysis of punctuation,
   - analysis of words.
+  Requirements:
+    numpy, pandas, sklearn, nltk, string, re, scipy
 * ClassificationOfTweets.ipynb:
   - advanced preprocessing.
+  Requirements:
+    numpy, pandas, sklearn, nltk, string, re, scipy, myUtils, pprint, pickle, os

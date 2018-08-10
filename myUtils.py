@@ -1,13 +1,26 @@
+'''
+Requirements:
+matplotlib, numpy, itertools, re, sklearn
+
+Plotting functions:
+- plot_confusion_matrix
+- plot_curve (accuracy)
+- plot_learning_curve (accuracy)
+- plot_validation_curve (accuracy)
+# above functions are based on "Python. Uczenie maszynowe", S. Raschka, 2018
+
+'''
+
 import matplotlib.pyplot as plt
 import numpy as np
 import itertools
+import re
 
 from sklearn.metrics import confusion_matrix
-
 from sklearn.model_selection import learning_curve
 from sklearn.model_selection import validation_curve
 
-# plotting
+########## PLOTTING ##########
 
 def plot_confusion_matrix(y_true, y_pred):
     conf_mat = confusion_matrix(y_true=y_true, y_pred=y_pred) / len(y_true)
