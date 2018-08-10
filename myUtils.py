@@ -7,8 +7,6 @@ Plotting functions:
 - plot_curve (accuracy)
 - plot_learning_curve (accuracy)
 - plot_validation_curve (accuracy)
-# above functions are based on "Python. Uczenie maszynowe", S. Raschka, 2018
-
 '''
 
 import matplotlib.pyplot as plt
