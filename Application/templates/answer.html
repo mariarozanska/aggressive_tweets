@@ -2,14 +2,15 @@
 <html>
     <head>
         <title>Detection of aggressive tweets</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     </head>
 
     <body>
-        <h1>Detection of aggressive tweets</h1>
+        <h1>DETECTOR OF AGGRESSIVE TWEETS</h1>
 
-        <h1>Content: {{ content }}</h1>
-        <h1>Prediction: {{ prediction }}</h1>
-        <h1>Probability: {{ probability }} %</h1>
+        <h2>Content: <i>{{ content }}</i></h2>
+        <h2>Prediction: {{ prediction }}</h2>
+        <h2>Probability: {{ probability }} %</h2>
 
         <form action="/">
             <div>
