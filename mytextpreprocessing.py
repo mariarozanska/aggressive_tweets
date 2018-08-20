@@ -116,20 +116,33 @@ class SimilarityToAggressiveTweets(BaseEstimator, TransformerMixin):
         pass
 
     def fit(self, X, y):
+        '''Find the document term matrix
+        for aggressive tweets consisting of one sentence'''
+
         X_one_aggressive_sent = np.array([doc for i, doc in enumerate(X)
                                           if len(nltk.sent_tokenize(doc)) == 1 and y[i] == 1])
-        # token_pattern = '(?u)\\b[a-z\'*]{2,}\\b'
-        self.vectorizer = CountVectorizer()
+        token_pattern = '(?u)\\b[a-z][a-z\'*]+\\b'
+        self.vectorizer = CountVectorizer(token_pattern=token_pattern)
         self.vectorizer.fit(X_one_aggressive_sent)
         self.aggressive_sent_dtm = self.vectorizer.transform(X_one_aggressive_sent)
         return self
 
     def transform(self, X):
+        '''Compute the similarity of data to aggressive tweets consisting of one sentence'''
+
         X_sent_tokenized = [nltk.sent_tokenize(doc) for doc in X]
         sent_dtms = [[self.vectorizer.transform([sent]) for sent in doc_sent_tokenized]
                      for doc_sent_tokenized in X_sent_tokenized]
 
-        similarities = [[[1 - cosine(aggressive_doc, sent_dtm.toarray())
+        def cosine_dist(x1, x2):
+            denominator = np.dot(x1, x1.T) * np.dot(x2, x2.T)
+            if denominator[0][0]:
+                dist = cosine(x1, x2)
+            else:
+                dist = 1.
+            return dist
+
+        similarities = [[[1 - cosine_dist(aggressive_doc, sent_dtm.toarray())
                           for sent_dtm in doc] for doc in sent_dtms]
                         for aggressive_doc in self.aggressive_sent_dtm.toarray()]
         X_transformed = [np.max(np.max(np.array(similarities)[:, i])) for i in range(len(X))]

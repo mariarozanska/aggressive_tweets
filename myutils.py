@@ -1,12 +1,20 @@
 '''
 Requirements:
-matplotlib, numpy, itertools, re, sklearn
+matplotlib, numpy, itertools, re, sklearn, pandas, scipy
 
 Plotting functions:
 - plot_confusion_matrix
-- plot_curve (accuracy)
+- plot_accuracy_curve
 - plot_learning_curve (accuracy)
 - plot_validation_curve (accuracy)
+- plot_roc_curve
+
+Functions which find patterns in the data
+and compute statistics of the matching:
+- compute_binom_pvalue
+- print_matching_statistics
+- find_all_matches
+- compute_matching_words_rate
 '''
 
 import numpy as np
@@ -17,6 +25,11 @@ import re
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import learning_curve
 from sklearn.model_selection import validation_curve
+from sklearn.metrics import roc_curve
+
+import pandas as pd
+from scipy import stats
+
 
 ########## PLOTTING ##########
 
@@ -34,7 +47,7 @@ def plot_confusion_matrix(y_true, y_pred):
     ax.set_ylabel('Real label', size=14)
     plt.show()
 
-def plot_curve(x_range, train_scores, test_scores, x_label='', x_scale='linear'):
+def plot_accuracy_curve(x_range, train_scores, test_scores, x_label='', x_scale='linear'):
     train_mean = train_scores.mean(axis=1)
     test_mean = test_scores.mean(axis=1)
     train_std = train_scores.std(axis=1)
@@ -63,17 +76,107 @@ def plot_learning_curve(estimator, X, y):
     train_sizes, train_scores, test_scores = learning_curve(estimator=estimator, X=X, y=y,
                                                             train_sizes=np.linspace(0.1, 1.0, 10),
                                                             scoring='accuracy',
-                                                            cv=10, n_jobs=1)
+                                                            cv=10, n_jobs=-1)
     
-    plot_curve(train_sizes, train_scores, test_scores, 
+    plot_accuracy_curve(train_sizes, train_scores, test_scores,
                x_label='Number of samples', x_scale='linear')
 
 def plot_validation_curve(estimator, X, y, param_name, param_range, x_scale='linear'):
     train_scores, test_scores = validation_curve(estimator=estimator, X=X, y=y,
                                                  param_name=param_name, param_range=param_range,
-                                                 scoring='accuracy', cv=10, n_jobs=1)
+                                                 scoring='accuracy', cv=10, n_jobs=-1)
     
     x_label = 'Parameter ' + re.search('__(.*)', param_name).group(1)
-    plot_curve(param_range, train_scores, test_scores, 
+    plot_accuracy_curve(param_range, train_scores, test_scores,
                x_label=x_label, x_scale=x_scale)
 
+def plot_roc_curve(y_labels, y_proba):
+    fprs, tprs, thresholds = roc_curve(y_true=y_labels, y_score=y_proba)
+
+    fig, ax = plt.subplots(figsize=(5, 5))
+    ax.plot(fprs, tprs)
+    ax.set_xlabel('False Positive Rate')
+    ax.set_ylabel('True Positive Rate')
+    ax.set_title('ROC')
+    plt.show()
+
+
+########## MATCHING ##########
+
+def compute_binom_pvalue(data, column_name, p):
+    '''Compute p-value for two-sided test of the null hypothesis that
+    the probability of occurrence of an aggressive tweet is p.
+    Parameters:
+    :param data: dataframe
+        data with the binary column 'label'
+    :param column_name: string
+        the name of the column to be checked
+    Returns:
+    :return pvalue: float
+        the p-value
+    '''
+
+    matching_labels = data.label[data[column_name].notnull()]
+    successes_no = matching_labels[matching_labels == 1].shape[0]
+    trials_no = matching_labels.shape[0]
+    pvalue = stats.binom_test(x=successes_no, n=trials_no, p=p)
+    return pvalue
+
+def print_matching_statistics(data, column_name, p):
+    '''Print matching statistics.
+    Parameters:
+    :param data: dataframe
+        data with the binary column 'label'
+    :param column_name: string
+        the name of the column to be checked
+    '''
+
+    matching_labels = data.label[data[column_name].notnull()]
+
+    score = matching_labels.mean()
+    print('The mean of labels of matching tweets = %.2f' % score)
+
+    rate = matching_labels.shape[0] / data.shape[0]
+    print('The rate of matching tweets = %.3f' % rate)
+
+    pvalue = compute_binom_pvalue(data, column_name, p)
+    print('p-value = %.3f' % pvalue)
+
+def find_all_matches(X, y, regex):
+    '''Find all matches of regex in a tweet.
+    Parameters:
+    :param X: array-like
+        list of tweets
+    :param y: array-like
+        list of labels
+    :param regex: string
+        regular expression
+    Returns:
+    :return data: dataframe
+        it has three columns: content, label, list of matches
+    '''
+
+    data = pd.DataFrame(np.c_[X, y], columns=['content', 'label'])
+    data[regex] = data.content.apply(lambda doc: re.findall(regex, doc) if re.findall(regex, doc) != [] else None)
+
+    return data
+
+def compute_matching_words_rate(regex, X):
+    '''Compute the ratio of matching words to all words in a tweet.
+    Parameters:
+    :param regex: string
+        regular expression
+    :param X: array-like
+        list of tweets
+    Returns:
+    :return matching_words_rate: array
+        the ratio of matching words to all words in a tweet
+    '''
+
+    matching_words_count = np.array([len(re.findall(regex, doc)) for doc in X])
+
+    words_count = np.array([len(list(filter(None, re.split('[^\\w\'*]', doc)))) for doc in X])
+    words_count[words_count == 0] = 1
+
+    matching_words_rate = matching_words_count / words_count
+    return matching_words_rate

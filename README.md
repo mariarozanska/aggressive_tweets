@@ -21,7 +21,7 @@ The dataset has 20001 tweets (in english) which are labeled (by human) as:
   - keeping only relevant information,
   - dividing the data into the training, validation and test part.<br/>
   Requirements:<br/>
-    json, os, numpy, pandas, sklearn
+    json, os, numpy, pandas, sklearn, matplotlib
 
 * _Baseline.ipynb_:
   - analysis of the baseline model (CountVectorizer, LogisticRegression).<br/>
@@ -51,9 +51,9 @@ The dataset has 20001 tweets (in english) which are labeled (by human) as:
 
 ## Data:<br/>
 * Original dataset (20001 items): Dataset_for_Detection_of_Cyber-Trolls.json
-* Training dataset (12800 items): train.json
-* Validation dataset (3200 items): valid.json
-* Test dataset (4001 items): test.json
+* Training dataset (12776 items): train.json
+* Validation dataset (3194 items): valid.json
+* Test dataset (3993 items): test.json
 * Stopwords which equally occurs in aggressive and nonaggressive training tweets: irrelevant_stopwords.csv
 
 ## Application:<br/>
