@@ -231,7 +231,7 @@ class TextPreprocessor(BaseEstimator, TransformerMixin):
     
     def normalize_repeating_letters(self, X):
         # letters repeated three or more times --> one letter
-        regex = '(([a-z])\\2{2,})'
+        regex = '(([a-z*])\\2{2,})'
         X_normalized = [re.sub(regex, '\\2', doc, flags=re.IGNORECASE) for doc in X]
         return np.array(X_normalized)
     
@@ -244,8 +244,15 @@ class TextPreprocessor(BaseEstimator, TransformerMixin):
     def join_scattered_letters(self, X):
         # e.g. n e v e r --> never
         regex = '([^\\w](?:[a-z] ){4,}(?:[a-z]\\b)?)'
-        X_normalized = [re.sub(regex, ' ' + '\\1'.replace(' ', '') + ' ', doc,
-                               flags=re.IGNORECASE) for doc in X]
+        matches_list = [re.findall(regex, doc, flags=re.IGNORECASE) for doc in X]
+
+        def replace_matches(doc, matches):
+            doc_transformed = doc
+            for match in matches:
+                doc_transformed = doc_transformed.replace(match, ' ' + match.replace(' ', '') + ' ', 1)
+            return doc_transformed
+
+        X_normalized = [replace_matches(doc, matches) for doc, matches in zip(X, matches_list)]
         return np.array(X_normalized)
 
     def translate_shortcuts(self, X):
@@ -258,7 +265,8 @@ class TextPreprocessor(BaseEstimator, TransformerMixin):
                       }
         X_translated = X
         for k, v in dictionary.items():
-            X_translated = [re.sub(k, ' short' + v + ' ', doc, flags=re.IGNORECASE)
+            # X_translated = [re.sub(k, ' short' + v + ' ', doc, flags=re.IGNORECASE)
+            X_translated = [re.sub(k, ' ' + v + ' ', doc, flags=re.IGNORECASE)
                             for doc in X_translated]
         return np.array(X_translated)
 

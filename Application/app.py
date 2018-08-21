@@ -11,12 +11,18 @@ from flask import Flask
 from flask import render_template, request
 from wtforms import Form, TextAreaField, validators
 from mytextpreprocessing import TextPreprocessor, FrequencyExtractor
+from keras.models import load_model
 
 app = Flask(__name__)
 
 cur_dir = os.path.dirname(__file__)
-with open(os.path.join(cur_dir, 'rbfsvm.p'), 'rb') as file:
+
+models_list = ['rbfsvm.p', 'xgb.p', 'baggingtree.p', 'logisticregression.p']
+with open(os.path.join(cur_dir, models_list[0]), 'rb') as file:
     clf = pickle.load(file)
+
+# rnn_model = 'rnn0.h5'
+# clf = load_model(os.path.join(cur_dir, rnn_model))
 
 with open(os.path.join(cur_dir, 'similarity.p'), 'rb') as file:
     sim = pickle.load(file)

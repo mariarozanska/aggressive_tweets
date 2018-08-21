@@ -4,7 +4,7 @@ The final project for Data Science Bootcamp
 ## Problem:<br/>
 Detection of aggressive tweets
 
-The best model: SVM with kernel='rbf' - accuracy 0.96
+The best model: SVM with kernel='rbf' ----> accuracy 0.96
 
 ## Dataset:<br/>
 https://www.kaggle.com/dataturks/dataset-for-detection-of-cybertrolls/home<br/>
@@ -55,7 +55,7 @@ The dataset has 20001 tweets (in english) which are labeled (by human) as:
 * _Test.ipynb_:
   - testing of models.<br/>
   Requirements:<br/>
-    numpy, pandas, pickle, os, mytextpreprocessing
+    numpy, pandas, pickle, os, mytextpreprocessing, keras
 
 ## Data:<br/>
 * Original dataset (20001 items): Dataset_for_Detection_of_Cyber-Trolls.json
@@ -71,4 +71,4 @@ To run the application, run the app.py file<br/>
 and open given url (default: http://127.0.0.1:5000/) in the browser.
 
 Requirements:<br/>
-    pickle, os, flask, wtforms, sklearn, nltk, string, re, bs4
+    pickle, os, flask, wtforms, sklearn, nltk, string, re, bs4, mytextpreprocessing, keras
