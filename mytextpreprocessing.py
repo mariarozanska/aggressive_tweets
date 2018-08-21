@@ -1,10 +1,11 @@
 '''
 Requirements:
-nltk, numpy, re, sklearn, bs4, scipy
+nltk, numpy, re, sklearn, bs4, scipy, keras
 
 - FrequencyExtractor
 - SimilarityToAggressiveTweets
 - TextPreprocessor
+- WordToIndexTransformer
 '''
 
 from sklearn.base import TransformerMixin, BaseEstimator
@@ -16,6 +17,8 @@ from bs4 import BeautifulSoup
 
 from sklearn.feature_extraction.text import CountVectorizer
 from scipy.spatial.distance import cosine
+
+from keras.preprocessing import sequence
 
 class FrequencyExtractor(BaseEstimator, TransformerMixin):
 
@@ -353,3 +356,33 @@ class TextPreprocessor(BaseEstimator, TransformerMixin):
 
         X_preprocessed = [' '.join(doc_tokenized) for doc_tokenized in X_tokenized]
         return np.array(X_preprocessed)
+
+
+class WordToIndexTransformer(BaseEstimator, TransformerMixin):
+
+    def __init__(self, textpreprocessor):
+        self.textpreprocessor = textpreprocessor
+        self.maxlen = 280
+
+    def fit(self, X, y=None):
+        X_preprocessed = self.textpreprocessor.fit_transform(X)
+        X_tokenized = [doc.split(' ') for doc in X_preprocessed]
+
+        all_words = [token for doc_tokenized in X_tokenized for token in doc_tokenized]
+        unique_words = np.unique(all_words)
+
+        self.index_to_word = unique_words.tolist()
+        self.unique_words_no = len(self.index_to_word)
+        self.word_to_index = {w: i for i, w in enumerate(self.index_to_word)}
+        return self
+
+    def transform(self, X):
+        '''Return the data in the right form for neural networks'''
+
+        X_preprocessed = self.textpreprocessor.transform(X)
+        X_tokenized = [doc.split(' ') for doc in X_preprocessed]
+        X_transformed = [[self.word_to_index.get(token, self.unique_words_no)
+                          for token in doc_tokenized]
+                         for doc_tokenized in X_tokenized]
+        X_transformed = sequence.pad_sequences(X_transformed, maxlen=self.maxlen)
+        return X_transformed

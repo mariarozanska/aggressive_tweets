@@ -4,6 +4,8 @@ The final project for Data Science Bootcamp
 ## Problem:<br/>
 Detection of aggressive tweets
 
+The best model: SVM with kernel='rbf' - accuracy 0.96
+
 ## Dataset:<br/>
 https://www.kaggle.com/dataturks/dataset-for-detection-of-cybertrolls/home<br/>
 The dataset has 20001 tweets (in english) which are labeled (by human) as:
@@ -12,7 +14,8 @@ The dataset has 20001 tweets (in english) which are labeled (by human) as:
 
 ## Files:
 * _myutils.py_:
-  - plotting functions.<br/>
+  - plotting functions,
+  - functions which find patterns in the data and compute statistics of the matching.<br/>
   Requirements:<br/>
     matplotlib, numpy, sklearn, itertools, re
 
@@ -40,7 +43,7 @@ The dataset has 20001 tweets (in english) which are labeled (by human) as:
   - feature extraction,
   - text preprocessing.<br/>
   Requirements:<br/>
-    nltk, numpy, re, sklearn, bs4, scipy
+    nltk, numpy, re, sklearn, bs4, scipy, keras
 
 * _ClassificationOfTweets.ipynb_:
   - advanced preprocessing,
@@ -48,6 +51,11 @@ The dataset has 20001 tweets (in english) which are labeled (by human) as:
   - classification.<br/>
   Requirements:<br/>
     numpy, pandas, sklearn, nltk, re, scipy, myutils, pprint, pickle, os, mytextpreprocessing
+
+* _Test.ipynb_:
+  - testing of models.<br/>
+  Requirements:<br/>
+    numpy, pandas, pickle, os, mytextpreprocessing
 
 ## Data:<br/>
 * Original dataset (20001 items): Dataset_for_Detection_of_Cyber-Trolls.json
@@ -57,6 +65,8 @@ The dataset has 20001 tweets (in english) which are labeled (by human) as:
 * Stopwords which equally occurs in aggressive and nonaggressive training tweets: irrelevant_stopwords.csv
 
 ## Application:<br/>
+The application uses the best model.
+
 To run the application, run the app.py file<br/>
 and open given url (default: http://127.0.0.1:5000/) in the browser.
 
