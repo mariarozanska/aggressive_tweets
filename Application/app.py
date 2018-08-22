@@ -17,33 +17,37 @@ import tensorflow as tf
 app = Flask(__name__)
 
 cur_dir = os.path.dirname(__file__)
-models_list = ['rbfsvm.p', 'xgb.p', 'baggingtree.p', 'logisticregression.p']
-rnn_model = 'rnn.h5'
-isrnn = True
-
-if isrnn:
-    global rnn
-    rnn = load_model(os.path.join(cur_dir, rnn_model))
-    global graph
-    graph = tf.get_default_graph()
-
-    with open(os.path.join(cur_dir, 'wordToIndex.p'), 'rb') as file:
-        wordToIndex = pickle.load(file)
-else:
-    with open(os.path.join(cur_dir, models_list[0]), 'rb') as file:
-        clf = pickle.load(file)
+models_dict = {'svm': 'rbfsvm.p',
+               'xgb': 'xgb.p',
+               'bag': 'baggingtree.p',
+               'lr': 'logisticregression.p'}
+rnn_models_list = ['birnn.h5', 'lstmrnn.h5']
 
 with open(os.path.join(cur_dir, 'similarity.p'), 'rb') as file:
     sim = pickle.load(file)
 
 
-def classify(tweet):
+def load_clf(clf_name):
+    if clf_name == 'rnn':
+        clf = load_model(os.path.join(cur_dir, rnn_models_list[0]))
+        global graph
+        graph = tf.get_default_graph()
+        global wordToIndex
+        with open(os.path.join(cur_dir, 'wordToIndex.p'), 'rb') as file:
+            wordToIndex = pickle.load(file)
+    else:
+        with open(os.path.join(cur_dir, models_dict[clf_name]), 'rb') as file:
+            clf = pickle.load(file)
+    return clf
+
+def classify(tweet, clf_name):
     labels = {0: 'Nonaggressive', 1: 'Aggressive'}
     X = [tweet]
-    if isrnn:
+    clf = load_clf(clf_name)
+    if clf_name == 'rnn':
         X_rnn = wordToIndex.transform(X)
         with graph.as_default():
-            y_pred_proba = rnn.predict(X_rnn)[0, 0]
+            y_pred_proba = clf.predict(X_rnn)[0, 0]
         y_pred = 1 if y_pred_proba >= 0.5 else 0
     else:
         y_pred = clf.predict(X)[0]
@@ -70,7 +74,8 @@ def results():
 
     if request.method == 'POST' and form.validate():
         tweet = request.form['content']
-        pred, proba = classify(tweet)
+        clf_name = request.form.get('clf')
+        pred, proba = classify(tweet, clf_name)
         similarity = compute_similarity(tweet)
         return render_template('answer.html', 
                                content=tweet, 
