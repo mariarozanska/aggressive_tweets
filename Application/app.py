@@ -13,6 +13,7 @@ from wtforms import Form, TextAreaField, validators
 from mytextpreprocessing import TextPreprocessor, FrequencyExtractor
 from keras.models import load_model
 import tensorflow as tf
+from keras import backend as K
 
 app = Flask(__name__)
 
@@ -21,7 +22,7 @@ models_dict = {'svm': 'rbfsvm.p',
                'xgb': 'xgb.p',
                'bag': 'baggingtree.p',
                'lr': 'logisticregression.p'}
-rnn_models_list = ['birnn.h5', 'lstmrnn.h5']
+rnn_models_list = ['bi30rnn.h5', 'birnn.h5', 'lstmrnn.h5']
 
 with open(os.path.join(cur_dir, 'similarity.p'), 'rb') as file:
     sim = pickle.load(file)
@@ -29,6 +30,7 @@ with open(os.path.join(cur_dir, 'similarity.p'), 'rb') as file:
 
 def load_clf(clf_name):
     if clf_name == 'rnn':
+        K.clear_session()
         clf = load_model(os.path.join(cur_dir, rnn_models_list[0]))
         global graph
         graph = tf.get_default_graph()
