@@ -65,8 +65,6 @@ The dataset has 20001 tweets (in english) which are labeled (by human) as:
 * Stopwords which equally occurs in aggressive and nonaggressive training tweets: irrelevant_stopwords.csv
 
 ## Application:<br/>
-The application uses the best model.
-
 To run the application, run the app.py file<br/>
 and open given url (default: http://127.0.0.1:5000/) in the browser.
 
