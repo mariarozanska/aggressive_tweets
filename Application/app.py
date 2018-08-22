@@ -12,26 +12,42 @@ from flask import render_template, request
 from wtforms import Form, TextAreaField, validators
 from mytextpreprocessing import TextPreprocessor, FrequencyExtractor
 from keras.models import load_model
+import tensorflow as tf
 
 app = Flask(__name__)
 
 cur_dir = os.path.dirname(__file__)
-
 models_list = ['rbfsvm.p', 'xgb.p', 'baggingtree.p', 'logisticregression.p']
-with open(os.path.join(cur_dir, models_list[0]), 'rb') as file:
-    clf = pickle.load(file)
+rnn_model = 'rnn.h5'
+isrnn = True
 
-# rnn_model = 'rnn0.h5'
-# clf = load_model(os.path.join(cur_dir, rnn_model))
+if isrnn:
+    global rnn
+    rnn = load_model(os.path.join(cur_dir, rnn_model))
+    global graph
+    graph = tf.get_default_graph()
+
+    with open(os.path.join(cur_dir, 'wordToIndex.p'), 'rb') as file:
+        wordToIndex = pickle.load(file)
+else:
+    with open(os.path.join(cur_dir, models_list[0]), 'rb') as file:
+        clf = pickle.load(file)
 
 with open(os.path.join(cur_dir, 'similarity.p'), 'rb') as file:
     sim = pickle.load(file)
 
+
 def classify(tweet):
     labels = {0: 'Nonaggressive', 1: 'Aggressive'}
     X = [tweet]
-    y_pred = clf.predict(X)[0]
-    y_pred_proba = clf.predict_proba(X)[0, y_pred]
+    if isrnn:
+        X_rnn = wordToIndex.transform(X)
+        with graph.as_default():
+            y_pred_proba = rnn.predict(X_rnn)[0, 0]
+        y_pred = 1 if y_pred_proba >= 0.5 else 0
+    else:
+        y_pred = clf.predict(X)[0]
+        y_pred_proba = clf.predict_proba(X)[0, y_pred]
     return labels[y_pred], y_pred_proba
 
 def compute_similarity(tweet):
