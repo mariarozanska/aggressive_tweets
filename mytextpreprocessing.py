@@ -256,7 +256,8 @@ class TextPreprocessor(BaseEstimator, TransformerMixin):
         return np.array(X_normalized)
 
     def translate_shortcuts(self, X):
-        # e.g. u --> shortyou
+        # e.g. u --> you
+        # # e.g. u --> shortyou
         dictionary = {'\\bu\\b': 'you',
                       '\\br\\b': 'are',
                       '\\sm\\s': 'am',

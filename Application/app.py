@@ -18,15 +18,17 @@ from keras import backend as K
 app = Flask(__name__)
 
 cur_dir = os.path.dirname(__file__)
-models_dict = {'svm': 'rbfsvm.p',
-               'xgb': 'xgb.p',
-               'bag': 'baggingtree.p',
-               'lr': 'logisticregression.p'}
-rnn_models_list = ['bi30rnn.h5', 'birnn.h5', 'lstmrnn.h5']
+models_dict = {'svm': 'rbfsvm18.p',
+               'xgb': 'xgb15.p',
+               'bag': 'baggingtree25.p',
+               'lr': 'logisticregression18.p'}
+rnn_models_list = ['lstm30rnn.h5', 'bi30rnn.h5']
 
 with open(os.path.join(cur_dir, 'similarity.p'), 'rb') as file:
     sim = pickle.load(file)
 
+with open(os.path.join(cur_dir, 'wordToIndex.p'), 'rb') as file:
+    wordToIndex = pickle.load(file)
 
 def load_clf(clf_name):
     if clf_name == 'rnn':
@@ -34,9 +36,6 @@ def load_clf(clf_name):
         clf = load_model(os.path.join(cur_dir, rnn_models_list[0]))
         global graph
         graph = tf.get_default_graph()
-        global wordToIndex
-        with open(os.path.join(cur_dir, 'wordToIndex.p'), 'rb') as file:
-            wordToIndex = pickle.load(file)
     else:
         with open(os.path.join(cur_dir, models_dict[clf_name]), 'rb') as file:
             clf = pickle.load(file)

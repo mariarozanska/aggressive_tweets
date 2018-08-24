@@ -1,8 +1,7 @@
 body {
     background-color: rgb(176, 230, 183);
-    text-align: center;
-    padding: 30px;
-    display: inline;
+    padding-top: 30px;
+    margin: 0px;
 }
 
 h1 {
@@ -10,6 +9,7 @@ h1 {
     background-color: Tomato;
     letter-spacing: 3px;
     padding: 2%;
+    text-align: center;
 }
 
 h2 {
@@ -19,8 +19,13 @@ h2 {
     padding-left: 5%;
 }
 
+form {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
 textarea {
-    width: 60%;
+    width: 100%;
     height: 300px;
     border-radius: 10px;
     font-size: 30px;
@@ -34,8 +39,10 @@ input {
     letter-spacing: 4px;
     border-style: solid;
     background-color:Tomato;
+    display: block;
+    margin: 20px auto;
 }
 
-input: hover {
+input:hover {
     background-color:#d33c22;
 }

@@ -76,7 +76,7 @@ def plot_learning_curve(estimator, X, y):
     train_sizes, train_scores, test_scores = learning_curve(estimator=estimator, X=X, y=y,
                                                             train_sizes=np.linspace(0.1, 1.0, 10),
                                                             scoring='accuracy',
-                                                            cv=10, n_jobs=-1)
+                                                            cv=5, n_jobs=-1)
     
     plot_accuracy_curve(train_sizes, train_scores, test_scores,
                x_label='Number of samples', x_scale='linear')
@@ -84,7 +84,7 @@ def plot_learning_curve(estimator, X, y):
 def plot_validation_curve(estimator, X, y, param_name, param_range, x_scale='linear'):
     train_scores, test_scores = validation_curve(estimator=estimator, X=X, y=y,
                                                  param_name=param_name, param_range=param_range,
-                                                 scoring='accuracy', cv=10, n_jobs=-1)
+                                                 scoring='accuracy', cv=5, n_jobs=-1)
     
     x_label = 'Parameter ' + re.search('__(.*)', param_name).group(1)
     plot_accuracy_curve(param_range, train_scores, test_scores,

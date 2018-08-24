@@ -10,13 +10,15 @@
 
         <form method="post" action="/results">
 
+            <div class="select">
             <select class="form-control" id="clf" name="clf">
-                <option value="rnn">RNN</option>
-                <option value="lr">LogisticRegression</option>
-                <option value="xgb">XGBClassifier</option>
-                <option value="svm" selected>SVM (rbf)</option>
                 <option value="bag">BaggingClassifier (decision tree)</option>
+                <option value="lr">LogisticRegression</option>
+                <option value="rnn">RNN</option>
+                <option value="svm" selected>SVM (rbf)</option>
+                <option value="xgb">XGBClassifier</option>
             </select>
+            </div>
 
             <div>{{ form.content }}</div>
 
