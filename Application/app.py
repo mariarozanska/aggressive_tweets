@@ -18,11 +18,12 @@ from keras import backend as K
 app = Flask(__name__)
 
 cur_dir = os.path.dirname(__file__)
-models_dict = {'svm': 'rbfsvm18.p',
+models_dict = {'svm': 'rbfsvm2.p',
                'xgb': 'xgb15.p',
                'bag': 'baggingtree25.p',
-               'lr': 'logisticregression18.p'}
-rnn_models_list = ['lstm30rnn.h5', 'bi30rnn.h5']
+               'lr': 'logisticregression2.p',
+               'sim': 'sim.p'}
+rnn_models_list = ['bi30bi10rnn.h5']
 
 with open(os.path.join(cur_dir, 'similarity.p'), 'rb') as file:
     sim = pickle.load(file)

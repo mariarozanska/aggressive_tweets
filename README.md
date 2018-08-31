@@ -45,6 +45,11 @@ The dataset has 20001 tweets (in english) which are labeled (by human) as:
   Requirements:<br/>
     nltk, numpy, re, sklearn, bs4, scipy, keras
 
+* _myclassifiers.py_:
+  - classifiers.<br/>
+  Requirements:<br/>
+    sklearn, mytextpreprocessing, numpy
+
 * _ClassificationOfTweets.ipynb_:
   - advanced preprocessing,
   - hyperparameter tuning,
