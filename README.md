@@ -43,7 +43,7 @@ The dataset has 20001 tweets (in english) which are labeled (by human) as:
   - feature extraction,
   - text preprocessing.<br/>
   Requirements:<br/>
-    nltk, numpy, re, sklearn, bs4, scipy, keras
+    nltk, numpy, re, sklearn, bs4, keras
 
 * _myclassifiers.py_:
   - classifiers.<br/>

@@ -1,6 +1,6 @@
 '''
 Requirements:
-nltk, numpy, re, sklearn, bs4, scipy, keras
+nltk, numpy, re, sklearn, bs4, keras
 
 - FrequencyExtractor
 - DocumentsSimilarity
@@ -16,8 +16,7 @@ import numpy as np
 from bs4 import BeautifulSoup
 
 from sklearn.feature_extraction.text import CountVectorizer
-from scipy.spatial.distance import cosine
-from scipy.sparse import issparse
+from sklearn.metrics.pairwise import pairwise_distances
 
 from keras.preprocessing import sequence
 
@@ -161,26 +160,14 @@ class DocumentsSimilarity(BaseEstimator, TransformerMixin):
         X_sent_tokenized = [nltk.sent_tokenize(doc) for doc in X]
         return np.array(X_sent_tokenized)
 
-    def _compute_cosine_dist(self, x1, x2):
-        denominator = np.dot(x1, x1.T) * np.dot(x2, x2.T)
-        if denominator[0][0]:
-            dist = cosine(x1, x2)
-        else:
-            dist = 1.
-        return dist
-
     def compute_similarities(self, X_sent_tokenized):
         sent_dtms = [[self.vectorizer.transform([sent]) for sent in doc_sent_tokenized]
                      for doc_sent_tokenized in X_sent_tokenized]
 
-        similarities = [[[1 - self._compute_cosine_dist(base_doc, sent_dtm.toarray())
-                          if issparse(sent_dtm) else 0
-                          for sent_dtm in doc]
+        X_transformed = [np.max([np.max((1 - pairwise_distances(sent_dtm, self.base_sent_dtm,
+                                                                metric='cosine')))
+                                for sent_dtm in doc])
                          for doc in sent_dtms]
-                        for base_doc in self.base_sent_dtm.toarray()]
-
-        X_transformed = [np.max(np.max(np.array(similarities)[:, i]))
-                         for i in range(len(X_sent_tokenized))]
         return np.array(X_transformed)
 
     def transform(self, X):
