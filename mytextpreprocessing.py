@@ -164,11 +164,11 @@ class DocumentsSimilarity(BaseEstimator, TransformerMixin):
         sent_dtms = [[self.vectorizer.transform([sent]) for sent in doc_sent_tokenized]
                      for doc_sent_tokenized in X_sent_tokenized]
 
-        X_transformed = [np.max([np.max((1 - pairwise_distances(sent_dtm, self.base_sent_dtm,
+        similarities = [np.max([np.max((1 - pairwise_distances(sent_dtm, self.base_sent_dtm,
                                                                 metric='cosine')))
                                 for sent_dtm in doc])
                          for doc in sent_dtms]
-        return np.array(X_transformed)
+        return np.array(similarities)
 
     def transform(self, X):
         '''Transform documents to the array of similarities'''
